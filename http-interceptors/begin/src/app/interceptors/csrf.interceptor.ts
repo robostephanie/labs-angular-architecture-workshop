@@ -13,7 +13,11 @@ export class CSRFInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    const setHeaders = { 'x-csrf-token': 'your-csrf-token-goes-here' };
+    const clonedReq = req.clone({ setHeaders });
 
-    return next.handle(req.clone()); // Remove this
+    console.log('Creating the CSRF header');
+
+    return next.handle(clonedReq);
   }
 }
