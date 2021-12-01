@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-
-import { Customer } from '../core/model/customer';
 import { Observable } from 'rxjs';
 
+import { Customer } from '../core/model/customer';
+import { CustomersService } from './customers.service';
 
 @Component({
     selector: 'app-customers',
@@ -11,11 +11,17 @@ import { Observable } from 'rxjs';
 export class CustomersComponent implements OnInit {
     title = 'Customers';
 
+    customers$: Observable<Customer[]>;
 
-    constructor() {}
+    constructor(
+        private readonly customersService: CustomersService,
+    ) {}
 
     ngOnInit() {
-
+        this.getCustomers();
     }
 
+    private getCustomers(): void {
+        this.customers$ = this.customersService.getAll();
+    }
 }

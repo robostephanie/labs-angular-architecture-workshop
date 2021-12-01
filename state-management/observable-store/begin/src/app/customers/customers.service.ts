@@ -10,21 +10,19 @@ import { StoreState } from '../shared/interfaces';
 @Injectable({
     providedIn: 'root'
 })
-export class CustomersService {
+export class CustomersService extends ObservableStore<StoreState> {
 
     apiUrl = 'api/customers';
 
     constructor(private http: HttpClient) { 
-        
+        super({ trackStateHistory: true });
     }
 
     private fetchCustomers() {
         return this.http.get<Customer[]>(this.apiUrl)
             .pipe(
                 map(customers => {
-                    
-                    // Set the Store State Here
-                    
+                    this.setState({ customers }, CustomersStoreActions.GetCustomers);
 
                     return customers;
                 }),
@@ -33,14 +31,11 @@ export class CustomersService {
     }
 
     getAll() {
-        // Get Store State Here
-        
+        const state = this.getState();
 
         // pull from store cache
         if (state && state.customers) {
-
-            // Log Store State Here
-
+            console.log(this.stateHistory);
 
             return of(state.customers);
         }
